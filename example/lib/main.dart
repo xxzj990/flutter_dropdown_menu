@@ -40,7 +40,7 @@ const List<Map<String, dynamic>> ORDERS = [
 const int ORDER_INDEX = 0;
 
 const List<Map<String, dynamic>> TYPES = [
-  {"title": "全部", "id": 0},
+  {"title": "全部生日蛋糕甜点饮品甜点饮品", "id": 0},
   {"title": "甜点饮品", "id": 1},
   {"title": "生日蛋糕", "id": 2},
   {"title": "火锅", "id": 3},
@@ -215,6 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.yellow,
       textColor: Colors.white,
       hasBorder: false,
+      itemWidth: 60.0,
       titles: [TYPES[TYPE_INDEX], ORDERS[ORDER_INDEX], FOODS[0]['children'][0]],
     );
   }

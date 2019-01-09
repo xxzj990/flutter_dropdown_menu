@@ -20,6 +20,7 @@ class DropdownHeader extends DropdownWidget {
   final Color backgroundColor;
   final Color textColor;
   final bool hasBorder;
+  final double itemWidth;
   final DropdownMenuHeadTapCallback onTap;
 
   /// height of menu
@@ -34,6 +35,7 @@ class DropdownHeader extends DropdownWidget {
       this.backgroundColor = Colors.white,
       this.textColor = Colors.black,
       this.hasBorder = true,
+      this.itemWidth = 80.0,
       DropdownMenuController controller,
       this.onTap,
       Key key,
@@ -66,10 +68,17 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
                   child: new Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                    new Text(
-                      getItemLabel(title),
-                      style: new TextStyle(
-                        color: selected ? primaryColor : widget.textColor,
+                    Flexible(
+                      child: Container(
+                        child: new Text(
+                          getItemLabel(title),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: new TextStyle(
+                            color: selected ? primaryColor : widget.textColor,
+                          ),
+                        ),
+                        width: widget.itemWidth,
                       ),
                     ),
                     new Icon(
