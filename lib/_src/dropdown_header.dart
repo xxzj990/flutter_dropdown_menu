@@ -120,9 +120,9 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
     }).toList();
 
     final Decoration decoration = new BoxDecoration(
-      border: new Border(
-        bottom: widget.hasBorder?Divider.createBorderSide(context):null,
-      ),
+      border: widget.hasBorder?new Border(
+        bottom: Divider.createBorderSide(context)
+      ):null,
     );
 
     return new DecoratedBox(
