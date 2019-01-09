@@ -213,6 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
       onTap: onTap,
       backgroundColor: Colors.yellow,
       textColor: Colors.white,
+      hasBorder: false,
       titles: [TYPES[TYPE_INDEX], ORDERS[ORDER_INDEX], FOODS[0]['children'][0]],
     );
   }

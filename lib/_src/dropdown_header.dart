@@ -19,6 +19,7 @@ class DropdownHeader extends DropdownWidget {
   final int activeIndex;
   final Color backgroundColor;
   final Color textColor;
+  final bool hasBorder;
   final DropdownMenuHeadTapCallback onTap;
 
   /// height of menu
@@ -32,6 +33,7 @@ class DropdownHeader extends DropdownWidget {
       this.activeIndex,
       this.backgroundColor = Colors.white,
       this.textColor = Colors.black,
+      this.hasBorder = true,
       DropdownMenuController controller,
       this.onTap,
       Key key,
@@ -59,7 +61,7 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
           padding: new EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
           child: new DecoratedBox(
               decoration: new BoxDecoration(
-                  border: new Border(left: Divider.createBorderSide(context))),
+                  border: widget.hasBorder?new Border(left: Divider.createBorderSide(context)):null),
               child: new Center(
                   child: new Row(
                       mainAxisSize: MainAxisSize.min,
