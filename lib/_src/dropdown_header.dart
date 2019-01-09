@@ -121,7 +121,7 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
 
     final Decoration decoration = new BoxDecoration(
       border: new Border(
-        bottom: Divider.createBorderSide(context),
+        bottom: widget.hasBorder?Divider.createBorderSide(context):null,
       ),
     );
 
