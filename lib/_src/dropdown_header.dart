@@ -18,6 +18,7 @@ class DropdownHeader extends DropdownWidget {
   final List<dynamic> titles;
   final int activeIndex;
   final Color backgroundColor;
+  final Color textColor;
   final DropdownMenuHeadTapCallback onTap;
 
   /// height of menu
@@ -30,6 +31,7 @@ class DropdownHeader extends DropdownWidget {
       {@required this.titles,
       this.activeIndex,
       this.backgroundColor = Colors.white,
+      this.textColor = Colors.black,
       DropdownMenuController controller,
       this.onTap,
       Key key,
@@ -49,7 +51,6 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
   Widget buildItem(
       BuildContext context, dynamic title, bool selected, int index) {
     final Color primaryColor = Theme.of(context).primaryColor;
-    final Color unselectedColor = Theme.of(context).unselectedWidgetColor;
     final GetItemLabel getItemLabel = widget.getItemLabel;
 
     return new GestureDetector(
@@ -66,12 +67,12 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
                     new Text(
                       getItemLabel(title),
                       style: new TextStyle(
-                        color: selected ? primaryColor : unselectedColor,
+                        color: selected ? primaryColor : widget.textColor,
                       ),
                     ),
                     new Icon(
                       selected ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                      color: selected ? primaryColor : unselectedColor,
+                      color: selected ? primaryColor : widget.textColor,
                     )
                   ])))),
       onTap: () {

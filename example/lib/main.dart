@@ -212,6 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return new DropdownHeader(
       onTap: onTap,
       backgroundColor: Colors.yellow,
+      textColor: Colors.white,
       titles: [TYPES[TYPE_INDEX], ORDERS[ORDER_INDEX], FOODS[0]['children'][0]],
     );
   }
