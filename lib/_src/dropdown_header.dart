@@ -17,6 +17,7 @@ String defaultGetItemLabel(dynamic data) {
 class DropdownHeader extends DropdownWidget {
   final List<dynamic> titles;
   final int activeIndex;
+  final Color backgroundColor;
   final DropdownMenuHeadTapCallback onTap;
 
   /// height of menu
@@ -28,6 +29,7 @@ class DropdownHeader extends DropdownWidget {
   DropdownHeader(
       {@required this.titles,
       this.activeIndex,
+      this.backgroundColor = Colors.white,
       DropdownMenuController controller,
       this.onTap,
       Key key,
@@ -123,8 +125,11 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
     return new DecoratedBox(
       decoration: decoration,
       child: new SizedBox(
-          child: new Row(
-            children: list,
+          child: new Container(
+            color: widget.backgroundColor,
+            child: new Row(
+              children: list,
+            ),
           ),
           height: height),
     );
