@@ -113,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   DropdownMenu buildDropdownMenu() {
     return new DropdownMenu(maxMenuHeight: kDropdownMenuItemHeight * 10,
+        backgroundColor: Colors.white,
         //  activeIndex: activeIndex,
         menus: [
           new DropdownMenuBuilder(

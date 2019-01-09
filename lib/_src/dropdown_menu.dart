@@ -25,6 +25,7 @@ class DropdownMenu extends DropdownWidget {
   final Duration showDuration;
   final Curve showCurve;
   final Curve hideCurve;
+  final Color backgroundColor;
 
   /// if set , background is rendered with ImageFilter.blur
   final double blur;
@@ -44,6 +45,7 @@ class DropdownMenu extends DropdownWidget {
       Duration showDuration,
       this.onHide,
       this.blur,
+      this.backgroundColor = Colors.white,
       Key key,
       this.maxMenuHeight,
       Curve hideCurve,
@@ -210,7 +212,7 @@ class _DropdownMenuState extends DropdownState<DropdownMenu>
           child: new Align(
               alignment: Alignment.topCenter,
               child: new Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: widget.backgroundColor,
                 child: createMenu(context, widget.menus[i], i),
               ))));
     }
