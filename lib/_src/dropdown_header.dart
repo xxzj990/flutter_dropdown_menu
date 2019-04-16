@@ -115,10 +115,10 @@ class _DropdownHeaderState extends DropdownState<DropdownHeader> {
     List<Widget> list = [];
 
     final int activeIndex = _activeIndex;
-    final List<dynamic> titles = _titles;
+    final List<dynamic> titles = widget.titles;
     final double height = widget.height;
 
-    for (int i = 0, c = widget.titles.length; i < c; ++i) {
+    for (int i = 0, c = titles.length; i < c; ++i) {
       list.add(buildItem(context, titles[i], i == activeIndex, i));
     }
 

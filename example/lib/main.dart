@@ -193,6 +193,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ]);
   }
 
+  int menuHeader0Index = 0;
+  int menuHeader1Index = 0;
+  int menuHeader2Index = 0;
+  int menuHeader2SubIndex = 0;
+
   DropdownHeader buildDropdownHeader({DropdownMenuHeadTapCallback onTap}) {
     return new DropdownHeader(
       onTap: onTap,
@@ -200,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
       textColor: Colors.white,
       hasBorder: false,
       itemWidth: 60.0,
-      titles: [TYPES[TYPE_INDEX], ORDERS[ORDER_INDEX], FOODS[0]['children'][0]],
+      titles: [TYPES[menuHeader0Index], ORDERS[menuHeader1Index], FOODS[menuHeader2Index]['children'][menuHeader2SubIndex]],
     );
   }
 
@@ -222,17 +227,34 @@ class _MyHomePageState extends State<MyHomePage> {
     return new DefaultDropdownMenuController(
       onSelected: ({int menuIndex, int index, int subIndex, dynamic data}) {
         print("menuIndex:$menuIndex index:$index subIndex:$subIndex data:$data");
-        print(">>>>>>>>>>>>>> globalKeyFix:$globalKeyFix");
+
+        setState(() {
+          switch(menuIndex) {
+            case 0:
+              menuHeader0Index = index;
+              menuHeader1Index = 0;// 第一个菜单重置第二个菜单
+              break;
+            case 1:
+              menuHeader1Index = index;
+              break;
+            case 2:
+              menuHeader2Index = index;
+              menuHeader2SubIndex = subIndex;
+              break;
+          }
+        });
+
+        /*print(">>>>>>>>>>>>>> globalKeyFix:$globalKeyFix");
         if (menuIndex == 0) {
           _delayShowMenu();
-          /*DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
+          *//*DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
           if (controller != null) {
             print("$controller");
             controller.show(1);
             controller.menuIndex = 1;
             controller.select(ORDERS[0], index: 0);
-          }*/
-        }
+          }*//*
+        }*/
       },
       child: new Column(
         children: <Widget>[
