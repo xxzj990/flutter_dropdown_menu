@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:example/custom_dropdown_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_menu/dropdown_menu.dart';
 import 'dart:math' as math;
@@ -108,8 +109,101 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     scrollController = new ScrollController();
     globalKey = new GlobalKey();
-    globalKeyFix = new GlobalKey();
     super.initState();
+  }
+
+  Widget buildMenu0Item(BuildContext context, dynamic data, int index) {
+    bool selected = index == menuHeader0Index;
+    return new Padding(
+        padding: new EdgeInsets.all(10.0),
+        child: new Row(
+          children: <Widget>[
+            new Text(
+              defaultGetItemLabel(data),
+              style: selected
+                  ? new TextStyle(fontSize: 14.0, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w400)
+                  : new TextStyle(fontSize: 14.0),
+            ),
+            new Expanded(
+                child: new Align(
+              alignment: Alignment.centerRight,
+              child: selected
+                  ? new Icon(
+                      Icons.check,
+                      color: Theme.of(context).primaryColor,
+                    )
+                  : null,
+            )),
+          ],
+        ));
+  }
+
+  Widget buildMenu1Item(BuildContext context, dynamic data, int index) {
+    bool selected = index == menuHeader1Index;
+    return new Padding(
+        padding: new EdgeInsets.all(10.0),
+        child: new Row(
+          children: <Widget>[
+            new Text(
+              defaultGetItemLabel(data),
+              style: selected
+                  ? new TextStyle(fontSize: 14.0, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w400)
+                  : new TextStyle(fontSize: 14.0),
+            ),
+            new Expanded(
+                child: new Align(
+              alignment: Alignment.centerRight,
+              child: selected
+                  ? new Icon(
+                      Icons.check,
+                      color: Theme.of(context).primaryColor,
+                    )
+                  : null,
+            )),
+          ],
+        ));
+  }
+
+  Widget buildMenu2Item(BuildContext context, dynamic data, int index) {
+    if (index != menuHeader2Index) {
+      return new DecoratedBox(
+          decoration: new BoxDecoration(border: new Border(right: Divider.createBorderSide(context))),
+          child: new Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: new Row(
+                children: <Widget>[
+                  new Text(data['title']),
+                ],
+              )));
+    } else {
+      return new DecoratedBox(
+          decoration: new BoxDecoration(border: new Border(top: Divider.createBorderSide(context), bottom: Divider.createBorderSide(context))),
+          child: new Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: new Row(
+                children: <Widget>[
+                  new Container(color: Theme.of(context).primaryColor, width: 3.0, height: 20.0),
+                  new Padding(padding: new EdgeInsets.only(left: 12.0), child: new Text(data['title'])),
+                ],
+              )));
+    }
+  }
+
+  Widget buildMenu2SubItem(BuildContext context, dynamic data, int index) {
+    Color color = index == menuHeader2SubIndex ? Theme.of(context).primaryColor : Theme.of(context).textTheme.body1.color;
+
+    return new SizedBox(
+      height: 45.0,
+      child: new Row(
+        children: <Widget>[
+          new Text(
+            data['title'],
+            style: new TextStyle(color: color),
+          ),
+          new Expanded(child: new Align(alignment: Alignment.centerRight, child: new Text(data['count'].toString())))
+        ],
+      ),
+    );
   }
 
   DropdownMenu buildDropdownMenu() {
@@ -121,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return new DropdownListMenu(
                   selectedIndex: TYPE_INDEX,
                   data: TYPES,
-                  itemBuilder: buildCheckItem,
+                  itemBuilder: buildMenu0Item,
                 );
               },
               height: kDropdownMenuItemHeight * TYPES.length),
@@ -130,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return new DropdownListMenu(
                   selectedIndex: ORDER_INDEX,
                   data: ORDERS,
-                  itemBuilder: buildCheckItem,
+                  itemBuilder: buildMenu1Item,
                 );
               },
               height: kDropdownMenuItemHeight * ORDERS.length),
@@ -142,47 +236,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemExtent: 45.0,
                   background: Colors.red,
                   subBackground: Colors.blueAccent,
-                  itemBuilder: (BuildContext context, dynamic data, bool selected) {
-                    if (!selected) {
-                      return new DecoratedBox(
-                          decoration: new BoxDecoration(border: new Border(right: Divider.createBorderSide(context))),
-                          child: new Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
-                              child: new Row(
-                                children: <Widget>[
-                                  new Text(data['title']),
-                                ],
-                              )));
-                    } else {
-                      return new DecoratedBox(
-                          decoration: new BoxDecoration(
-                              border: new Border(top: Divider.createBorderSide(context), bottom: Divider.createBorderSide(context))),
-                          child: new Container(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Container(color: Theme.of(context).primaryColor, width: 3.0, height: 20.0),
-                                  new Padding(padding: new EdgeInsets.only(left: 12.0), child: new Text(data['title'])),
-                                ],
-                              )));
-                    }
-                  },
-                  subItemBuilder: (BuildContext context, dynamic data, bool selected) {
-                    Color color = selected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.body1.color;
-
-                    return new SizedBox(
-                      height: 45.0,
-                      child: new Row(
-                        children: <Widget>[
-                          new Text(
-                            data['title'],
-                            style: new TextStyle(color: color),
-                          ),
-                          new Expanded(child: new Align(alignment: Alignment.centerRight, child: new Text(data['count'].toString())))
-                        ],
-                      ),
-                    );
-                  },
+                  itemBuilder: buildMenu2Item,
+                  subItemBuilder: buildMenu2SubItem,
                   getSubData: (dynamic data) {
                     return data['children'];
                   },
@@ -209,91 +264,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _delayShowMenu() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      setState(() {
-        DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
-        if (controller != null) {
-          print("$controller");
-          controller.show(1);
-          controller.menuIndex = 1;
-          controller.select(ORDERS[0], index: 0);
-        }
-      });
-    });
-  }
-
   Widget buildFixHeaderDropdownMenu() {
-    return new DefaultDropdownMenuController(
-      onSelected: ({int menuIndex, int index, int subIndex, dynamic data}) {
-        print("menuIndex:$menuIndex index:$index subIndex:$subIndex data:$data");
-
-        setState(() {
-          switch(menuIndex) {
-            case 0:
-              menuHeader0Index = index;
-              menuHeader1Index = 0;// 第一个菜单重置第二个菜单
-              break;
-            case 1:
-              menuHeader1Index = index;
-              break;
-            case 2:
-              menuHeader2Index = index;
-              menuHeader2SubIndex = subIndex;
-              break;
-          }
-        });
-
-        /*print(">>>>>>>>>>>>>> globalKeyFix:$globalKeyFix");
-        if (menuIndex == 0) {
-          _delayShowMenu();
-          *//*DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
-          if (controller != null) {
-            print("$controller");
-            controller.show(1);
-            controller.menuIndex = 1;
-            controller.select(ORDERS[0], index: 0);
-          }*//*
-        }*/
-      },
-      child: new Column(
+    return CustomDropdownMenu(
+      meuns: [TYPES, ORDERS, FOODS],
+      content: new ListView(
         children: <Widget>[
           Container(
-            key: globalKeyFix,
-            color: Colors.black,
-            height: 1,
-          ),
-          buildDropdownHeader(),
-          new Expanded(
-              child: new Stack(
-            children: <Widget>[
-              new ListView(
-                children: <Widget>[
-                  Container(
-                    child: Center(
-                      child: FlatButton(
-                          onPressed: () {
-                            setState(() {
-                              DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
-                              if (controller != null) {
-                                print("$controller");
-                                controller.show(1);
-                                controller.menuIndex = 1;
-                                controller.select(ORDERS[0], index: 0);
-                              }
-                            });
-                          },
-                          child: Text("Test")),
-                    ),
-                    height: 200,
-                  )
-                ],
-              ),
-              buildDropdownMenu()
-            ],
-          ))
+            child: Center(
+              child: FlatButton(onPressed: () {}, child: Text("Hello")),
+            ),
+            height: 200,
+          )
         ],
       ),
+      callback: ({int menuIndex, int index, int subIndex, dynamic data}) {
+        print("view menuIndex:$menuIndex , index:$index , subIndex:$subIndex , data:$data");
+      },
     );
   }
 
@@ -340,7 +326,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   GlobalKey globalKey;
-  GlobalKey globalKeyFix;
 
   @override
   void dispose() {

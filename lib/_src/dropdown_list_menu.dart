@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:dropdown_menu/_src/drapdown_common.dart';
 
-typedef Widget MenuItemBuilder<T>(BuildContext context, T data, bool selected);
+typedef Widget MenuItemBuilder<T>(BuildContext context, T data, int index);
 typedef void MenuItemOnTap<T>(T data, int index);
 typedef List<E> GetSubData<T, E>(T data);
 
@@ -42,7 +42,7 @@ class _MenuListState<T> extends DropdownState<DropdownListMenu<T>> {
     final T data = list[index];
     return new GestureDetector(
       behavior: HitTestBehavior.opaque,
-      child: widget.itemBuilder(context, data, index == _selectedIndex),
+      child: widget.itemBuilder(context, data, index),
       onTap: () {
         setState(() {
           _selectedIndex = index;
@@ -187,8 +187,7 @@ class _TreeMenuList<T, E> extends DropdownState<DropdownTreeMenu> {
   Widget buildSubItem(BuildContext context, int index) {
     return new GestureDetector(
       behavior: HitTestBehavior.opaque,
-      child: widget.subItemBuilder(context, _subData[index],
-          _activeIndex == _selectedIndex && index == _subSelectedIndex),
+      child: widget.subItemBuilder(context, _subData[index], index),
       onTap: () {
         assert(controller != null);
         controller.select(_subData[index],
@@ -206,7 +205,7 @@ class _TreeMenuList<T, E> extends DropdownState<DropdownTreeMenu> {
     final T data = list[index];
     return new GestureDetector(
       behavior: HitTestBehavior.opaque,
-      child: widget.itemBuilder(context, data, index == _activeIndex),
+      child: widget.itemBuilder(context, data, index),
       onTap: () {
         //切换
         //拿到数据
