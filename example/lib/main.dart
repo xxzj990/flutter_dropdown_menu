@@ -280,6 +280,9 @@ class _MyHomePageState extends State<MyHomePage> {
       callback: ({int menuIndex, int index, int subIndex, dynamic data}) {
         print("view menuIndex:$menuIndex , index:$index , subIndex:$subIndex , data:$data");
       },
+      treeMenuIndexSelected: (int index) {
+        print("view treeMenuIndexSelected index:$index");
+      },
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:dropdown_menu/_src/drapdown_common.dart';
 typedef Widget MenuItemBuilder<T>(BuildContext context, T data, int index);
 typedef void MenuItemOnTap<T>(T data, int index);
 typedef List<E> GetSubData<T, E>(T data);
+typedef TreeMenuIndexSelected(int index);
 
 const double kDropdownMenuItemHeight = 45.0;
 
@@ -127,6 +128,8 @@ class DropdownTreeMenu<T, E> extends DropdownWidget {
   /// if `subFlex`==2 and `flex`==1,then sub list will be 2 times larger than main list
   final int subFlex;
 
+  final TreeMenuIndexSelected treeMenuIndexSelected;
+  
   DropdownTreeMenu({
     this.data,
     double itemExtent,
@@ -140,6 +143,7 @@ class DropdownTreeMenu<T, E> extends DropdownWidget {
     this.flex: 1,
     this.subFlex: 2,
     this.subSelectedIndex,
+    this.treeMenuIndexSelected = null,
   })  : assert(getSubData != null),
         itemExtent = itemExtent ?? kDropdownMenuItemHeight;
 
@@ -213,6 +217,10 @@ class _TreeMenuList<T, E> extends DropdownState<DropdownTreeMenu> {
           _subData = widget.getSubData(data);
           _activeIndex = index;
         });
+        
+        if(widget.treeMenuIndexSelected != null) {
+          widget.treeMenuIndexSelected(index);
+        }
       },
     );
   }

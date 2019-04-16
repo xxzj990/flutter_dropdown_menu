@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 typedef CustomDropdownMenuOnSelected(
     {int menuIndex, int index, int subIndex, dynamic data});
+typedef CustomTreeMenuIndexSelected(int index);
 
 class CustomDropdownMenu extends StatefulWidget {
   List<List<Object>> meuns;
   Widget content;
   CustomDropdownMenuOnSelected callback;
+  CustomTreeMenuIndexSelected treeMenuIndexSelected;
   int menu0Index;
   int menu1Index;
   int menu2Index;
@@ -18,6 +20,7 @@ class CustomDropdownMenu extends StatefulWidget {
     @required this.meuns,
     @required this.content,
     this.callback = null,
+    this.treeMenuIndexSelected = null,
     this.menu0Index = 0,
     this.menu1Index = 0,
     this.menu2Index = 0,
@@ -114,6 +117,14 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
                   subBackground: Colors.blueAccent,
                   itemBuilder: buildMenu2Item,
                   subItemBuilder: buildMenu2SubItem,
+                  treeMenuIndexSelected: (index) {
+                    setState(() {
+                      widget.menu2Index = index;
+                    });
+                    if(widget.treeMenuIndexSelected != null) {
+                      widget.treeMenuIndexSelected(index);
+                    }
+                  },
                   getSubData: (dynamic data) {
                     return data['children'];
                   },
