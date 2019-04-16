@@ -184,7 +184,9 @@ class _TreeMenuList<T, E> extends DropdownState<DropdownTreeMenu> {
     // _selectedIndex = widget.selectedIndex;
     // _subSelectedIndex = widget.subSelectedIndex;
     // _activeIndex = _selectedIndex;
-
+    if (_activeIndex != null) {
+      _subData = widget.getSubData(_data[_activeIndex]);
+    }
     super.didUpdateWidget(oldWidget);
   }
 
