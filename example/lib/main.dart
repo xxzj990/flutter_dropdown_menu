@@ -14,8 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Demo',
-      theme: new ThemeData(
-          primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
+      theme: new ThemeData(primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
       home: new MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -104,16 +103,17 @@ const int FOOD_INDEX = 1;
 
 class _MyHomePageState extends State<MyHomePage> {
   ScrollController scrollController;
+
   @override
   void initState() {
     scrollController = new ScrollController();
     globalKey = new GlobalKey();
+    globalKeyFix = new GlobalKey();
     super.initState();
   }
 
   DropdownMenu buildDropdownMenu() {
-    return new DropdownMenu(maxMenuHeight: kDropdownMenuItemHeight * 10,
-        backgroundColor: Colors.white,
+    return new DropdownMenu(maxMenuHeight: kDropdownMenuItemHeight * 10, backgroundColor: Colors.white,
         //  activeIndex: activeIndex,
         menus: [
           new DropdownMenuBuilder(
@@ -142,13 +142,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemExtent: 45.0,
                   background: Colors.red,
                   subBackground: Colors.blueAccent,
-                  itemBuilder:
-                      (BuildContext context, dynamic data, bool selected) {
+                  itemBuilder: (BuildContext context, dynamic data, bool selected) {
                     if (!selected) {
                       return new DecoratedBox(
-                          decoration: new BoxDecoration(
-                              border: new Border(
-                                  right: Divider.createBorderSide(context))),
+                          decoration: new BoxDecoration(border: new Border(right: Divider.createBorderSide(context))),
                           child: new Padding(
                               padding: const EdgeInsets.only(left: 15.0),
                               child: new Row(
@@ -159,29 +156,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     } else {
                       return new DecoratedBox(
                           decoration: new BoxDecoration(
-                              border: new Border(
-                                  top: Divider.createBorderSide(context),
-                                  bottom: Divider.createBorderSide(context))),
+                              border: new Border(top: Divider.createBorderSide(context), bottom: Divider.createBorderSide(context))),
                           child: new Container(
                               color: Theme.of(context).scaffoldBackgroundColor,
                               child: new Row(
                                 children: <Widget>[
-                                  new Container(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 3.0,
-                                      height: 20.0),
-                                  new Padding(
-                                      padding: new EdgeInsets.only(left: 12.0),
-                                      child: new Text(data['title'])),
+                                  new Container(color: Theme.of(context).primaryColor, width: 3.0, height: 20.0),
+                                  new Padding(padding: new EdgeInsets.only(left: 12.0), child: new Text(data['title'])),
                                 ],
                               )));
                     }
                   },
-                  subItemBuilder:
-                      (BuildContext context, dynamic data, bool selected) {
-                    Color color = selected
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).textTheme.body1.color;
+                  subItemBuilder: (BuildContext context, dynamic data, bool selected) {
+                    Color color = selected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.body1.color;
 
                     return new SizedBox(
                       height: 45.0,
@@ -191,10 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             data['title'],
                             style: new TextStyle(color: color),
                           ),
-                          new Expanded(
-                              child: new Align(
-                                  alignment: Alignment.centerRight,
-                                  child: new Text(data['count'].toString())))
+                          new Expanded(child: new Align(alignment: Alignment.centerRight, child: new Text(data['count'].toString())))
                         ],
                       ),
                     );
@@ -220,77 +204,122 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _delayShowMenu() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
+        if (controller != null) {
+          print("$controller");
+          controller.show(1);
+          controller.menuIndex = 1;
+          controller.select(ORDERS[0], index: 0);
+        }
+      });
+    });
+  }
+
   Widget buildFixHeaderDropdownMenu() {
     return new DefaultDropdownMenuController(
-        child: new Column(
-      children: <Widget>[
-        buildDropdownHeader(),
-        new Expanded(
-            child: new Stack(
-          children: <Widget>[
-            new ListView(
-              children: <Widget>[new Text("123123")],
-            ),
-            buildDropdownMenu()
-          ],
-        ))
-      ],
-    ));
+      onSelected: ({int menuIndex, int index, int subIndex, dynamic data}) {
+        print("menuIndex:$menuIndex index:$index subIndex:$subIndex data:$data");
+        print(">>>>>>>>>>>>>> globalKeyFix:$globalKeyFix");
+        if (menuIndex == 0) {
+          _delayShowMenu();
+          /*DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
+          if (controller != null) {
+            print("$controller");
+            controller.show(1);
+            controller.menuIndex = 1;
+            controller.select(ORDERS[0], index: 0);
+          }*/
+        }
+      },
+      child: new Column(
+        children: <Widget>[
+          Container(
+            key: globalKeyFix,
+            color: Colors.black,
+            height: 1,
+          ),
+          buildDropdownHeader(),
+          new Expanded(
+              child: new Stack(
+            children: <Widget>[
+              new ListView(
+                children: <Widget>[
+                  Container(
+                    child: Center(
+                      child: FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              DropdownMenuController controller = DefaultDropdownMenuController.of(globalKeyFix.currentContext);
+                              if (controller != null) {
+                                print("$controller");
+                                controller.show(1);
+                                controller.menuIndex = 1;
+                                controller.select(ORDERS[0], index: 0);
+                              }
+                            });
+                          },
+                          child: Text("Test")),
+                    ),
+                    height: 200,
+                  )
+                ],
+              ),
+              buildDropdownMenu()
+            ],
+          ))
+        ],
+      ),
+    );
   }
 
   Widget buildInnerListHeaderDropdownMenu() {
     return new DefaultDropdownMenuController(
         onSelected: ({int menuIndex, int index, int subIndex, dynamic data}) {
-          print(
-              "menuIndex:$menuIndex index:$index subIndex:$subIndex data:$data");
+          print("menuIndex:$menuIndex index:$index subIndex:$subIndex data:$data");
         },
         child: new Stack(
           children: <Widget>[
-            new CustomScrollView(
-                controller: scrollController,
-                slivers: <Widget>[
-                  new SliverList(
-                      key: globalKey,
-                      delegate: new SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                        return new Container(
-                          color: Colors.black26,
-                          child: new Image.asset(
-                            "images/header.jpg",
-                            fit: BoxFit.fill,
-                          ),
-                        );
-                      }, childCount: 1)),
-                  new SliverPersistentHeader(
-                    delegate: new DropdownSliverChildBuilderDelegate(
-                        builder: (BuildContext context) {
-                      return new Container(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          child: buildDropdownHeader(onTap: this._onTapHead));
-                    }),
-                    pinned: true,
-                    floating: true,
-                  ),
-                  new SliverList(
-                      delegate: new SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
+            new CustomScrollView(controller: scrollController, slivers: <Widget>[
+              new SliverList(
+                  key: globalKey,
+                  delegate: new SliverChildBuilderDelegate((BuildContext context, int index) {
                     return new Container(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: Colors.black26,
                       child: new Image.asset(
-                        "images/body.jpg",
+                        "images/header.jpg",
                         fit: BoxFit.fill,
                       ),
                     );
-                  }, childCount: 10)),
-                ]),
-            new Padding(
-                padding: new EdgeInsets.only(top: 46.0),
-                child: buildDropdownMenu())
+                  }, childCount: 1)),
+              new SliverPersistentHeader(
+                delegate: new DropdownSliverChildBuilderDelegate(builder: (BuildContext context) {
+                  return new Container(color: Theme.of(context).scaffoldBackgroundColor, child: buildDropdownHeader(onTap: this._onTapHead));
+                }),
+                pinned: true,
+                floating: true,
+              ),
+              new SliverList(
+                  delegate: new SliverChildBuilderDelegate((BuildContext context, int index) {
+                return new Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: new Image.asset(
+                    "images/body.jpg",
+                    fit: BoxFit.fill,
+                  ),
+                );
+              }, childCount: 10)),
+            ]),
+            new Padding(padding: new EdgeInsets.only(top: 46.0), child: buildDropdownMenu())
           ],
         ));
   }
 
   GlobalKey globalKey;
+  GlobalKey globalKeyFix;
+
   @override
   void dispose() {
     super.dispose();
@@ -298,12 +327,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onTapHead(int index) {
     RenderObject renderObject = globalKey.currentContext.findRenderObject();
-    DropdownMenuController controller =
-        DefaultDropdownMenuController.of(globalKey.currentContext);
+    DropdownMenuController controller = DefaultDropdownMenuController.of(globalKey.currentContext);
     //
     scrollController
-        .animateTo(scrollController.offset + renderObject.semanticBounds.height,
-            duration: new Duration(milliseconds: 150), curve: Curves.ease)
+        .animateTo(scrollController.offset + renderObject.semanticBounds.height, duration: new Duration(milliseconds: 150), curve: Curves.ease)
         .whenComplete(() {
       controller.show(index);
     });
@@ -317,9 +344,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         title: new Text(widget.title),
       ),
-      body: _currentIndex == 0
-          ? buildFixHeaderDropdownMenu()
-          : buildInnerListHeaderDropdownMenu(),
+      body: _currentIndex == 0 ? buildFixHeaderDropdownMenu() : buildInnerListHeaderDropdownMenu(),
       bottomNavigationBar: new BottomNavigationBar(
           onTap: (int index) {
             setState(() {
@@ -330,10 +355,7 @@ class _MyHomePageState extends State<MyHomePage> {
           items: [
             {"name": "Fix", "icon": Icons.hearing},
             {"name": "ScrollView", "icon": Icons.list}
-          ]
-              .map((dynamic data) => new BottomNavigationBarItem(
-                  title: new Text(data["name"]), icon: new Icon(data["icon"])))
-              .toList()),
+          ].map((dynamic data) => new BottomNavigationBarItem(title: new Text(data["name"]), icon: new Icon(data["icon"]))).toList()),
     );
   }
 }
